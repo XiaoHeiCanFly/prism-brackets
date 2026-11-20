@@ -29,7 +29,7 @@ Prism Brackets 是一款 JetBrains IDE 插件。它按嵌套层级为成对括�
 ./gradlew test buildPlugin
 ```
 
-当前版本生成的安装包为 `build/distributions/prism-brackets-0.2.0.zip`。
+当前版本生成的安装包为 `build/distributions/prism-brackets-0.2.1.zip`。
 
 ## 开源协议
 
