@@ -33,4 +33,6 @@ Prism Brackets 是一款 JetBrains IDE 插件。它按嵌套层级为成对括�
 
 ## 开源协议
 
-项目代码采用 [MIT License](LICENSE)。Gradle Wrapper 等第三方组件适用各自的许可证。
+项目代码采用 [Apache License 2.0](LICENSE)。Gradle Wrapper 等第三方组件适用各自的许可证。
+
+Copyright © 2026 XiaoHeiCanFly
