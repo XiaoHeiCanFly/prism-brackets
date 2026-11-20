@@ -1,0 +1,66 @@
+<idea-plugin resource-bundle="messages.PrismBundle">
+    <id>com.prismbrackets.free</id>
+    <name>Prism Brackets</name>
+    <vendor email="support@prismbrackets.local" url="https://example.com/prism-brackets-free">Prism Brackets Contributors</vendor>
+
+    <description><![CDATA[
+        <p>Open-source prismatic color highlighting for brackets and related editor enhancements for IntelliJ-based IDEs.</p>
+        <ul>
+            <li><b>Multi-color brackets</b> — colors matched bracket pairs by nesting depth, supports all bracket types</li>
+            <li><b>Scope highlighting</b> — optional (off by default): draws a border in the current bracket color around the enclosing scope, with the interior filled using the same color at reduced opacity</li>
+            <li><b>Colorful variables</b> — semantic highlighting that assigns stable colors to variables</li>
+            <li><b>Indent guide highlighting</b> — colors indent guides by depth</li>
+            <li>Languages: Java, Kotlin, Python, JavaScript, TypeScript, JSX, TSX, Vue, React, YAML, Rust, Go, Dart</li>
+        </ul>
+        <p>Colors can be customized under Settings | Editor | Color Scheme | Prism Brackets.</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <ul>
+            <li>Rebranded as Prism Brackets; settings moved under Settings | Tools; editor popup toggles removed.</li>
+        </ul>
+    ]]></change-notes>
+
+    <!-- 平台基础 -->
+    <depends>com.intellij.modules.platform</depends>
+    <!-- PSI/高亮/daemon 基础设施（HighlightVisitor、TextEditorHighlightingPass 等） -->
+    <depends>com.intellij.modules.lang</depends>
+    <!-- 语言支持均为可选依赖：未安装对应语言插件时插件仍可加载 -->
+    <depends optional="true" config-file="withJava.xml">com.intellij.modules.java</depends>
+    <depends optional="true" config-file="withKotlin.xml">org.jetbrains.kotlin</depends>
+    <depends optional="true" config-file="withPython.xml">PythonCore</depends>
+    <depends optional="true" config-file="withJavaScript.xml">JavaScript</depends>
+    <depends optional="true" config-file="withYaml.xml">org.jetbrains.plugins.yaml</depends>
+    <depends optional="true" config-file="withRust.xml">Rust</depends>
+    <depends optional="true" config-file="withGo.xml">org.jetbrains.plugins.go</depends>
+    <depends optional="true" config-file="withDart.xml">Dart</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- 应用级设置持久化 -->
+        <applicationService serviceImplementation="com.prismbrackets.free.settings.PrismSettings"/>
+
+        <!-- 设置页：Settings | Tools | Prism Brackets -->
+        <applicationConfigurable
+                parentId="tools"
+                id="com.prismbrackets.free.settings.PrismConfigurable"
+                bundle="messages.PrismBundle"
+                key="settings.display.name"
+                implementation="com.prismbrackets.free.settings.PrismConfigurable"/>
+
+        <!-- 颜色方案页：Settings | Editor | Color Scheme | Prism Brackets -->
+        <colorSettingsPage implementation="com.prismbrackets.free.colors.PrismColorSettingsPage"/>
+
+        <!-- 彩虹括号 + 彩虹变量：高亮访问器 -->
+        <highlightVisitor implementation="com.prismbrackets.free.highlight.PrismHighlightVisitor"/>
+
+        <!-- 彩虹缩进线：自建 highlighting pass + 禁用平台原生灰线（功能开启时） -->
+        <highlightingPassFactory implementation="com.prismbrackets.free.indents.PrismIndentPassFactory"/>
+        <daemon.indentGuidePassFilter implementation="com.prismbrackets.free.indents.PrismIndentPassFilter"/>
+
+        <!-- 作用域高亮：独立开关，跟随光标所在括号对 -->
+        <editorFactoryListener implementation="com.prismbrackets.free.scope.ScopeHighlightEditorListener"/>
+
+        <!-- 彩虹着色层提升：警告（如 Vue 组件未导入）的波浪线/背景保留，字色仍显示彩虹 -->
+        <internalHighlightingLayerSupplier implementation="com.prismbrackets.free.highlight.PrismLayerSupplier"/>
+    </extensions>
+</idea-plugin>

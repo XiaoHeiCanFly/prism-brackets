@@ -1,0 +1,5 @@
+<idea-plugin>
+    <!-- Language-specific registrations for Prism Brackets.
+         Core highlighting is language-agnostic; this file reserves space for
+         language-tuned extensions (e.g. JSX/Vue tag handling). -->
+</idea-plugin>
